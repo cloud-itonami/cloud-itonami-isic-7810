@@ -1,0 +1,10 @@
+{:itonami.blueprint/id "cloud-itonami-7810"
+ :itonami.blueprint/name "Community Employment Agency"
+ :itonami.blueprint/isic-rev5 "7810"
+ :itonami.blueprint/domain :support/employment-agency
+ :itonami.blueprint/license "AGPL-3.0-or-later"
+ :itonami.blueprint/social-impact [:workforce-access :fair-placement :worker-protection]
+ :itonami.blueprint/governor :employment-agency-governor
+ :itonami.blueprint/robotics true
+ :itonami.blueprint/required-technologies [:robotics :identity :forms :dmn :bpmn :audit-ledger]
+ :itonami.blueprint/status :public-oss}
