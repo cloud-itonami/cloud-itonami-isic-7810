@@ -85,3 +85,15 @@
                                     :matched? false :placed? false
                                     :jurisdiction "JPN" :status :intake}})
     (is (= "c" (:candidate (store/candidacy s "x"))))))
+
+(deftest referral-id-round-trips
+  ;; the receiving side of superproject ADR-2607131000: a candidacy that
+  ;; arrived via a 6399 application-referral keeps the referral record id,
+  ;; on BOTH backends (the end-to-end handoff story is reconstructed by
+  ;; joining the two actors' records).
+  (doseq [[label s] (backends)]
+    (testing label
+      (store/commit-record! s {:effect :candidacy/upsert
+                               :value {:id "candidacy-1" :referral-id "JPN-REF-000000"}})
+      (is (= "JPN-REF-000000" (:referral-id (store/candidacy s "candidacy-1"))))
+      (is (= "Kita Taro" (:candidate (store/candidacy s "candidacy-1"))) "unrelated fields preserved"))))

@@ -23,6 +23,9 @@
          (str "<span class=\"chip\">マッチ " (esc (:matched c)) "</span>"))
        (when (:placed c)
          (str "<span class=\"chip\">配置 " (esc (:placed c)) "</span>"))
+       (when (:referral c)
+         (str "<span class=\"chip\">紹介経由 " (esc (:referral c))
+              "</span> <span class=\"meta\">(Meta Job Search からの referral)</span>"))
        "</div>"))
 
 (defn- matches? [c q]

@@ -204,7 +204,8 @@
                               matching-criteria-discriminatory?
                               requires-work-authorization? work-authorization-verified?
                               matched? placed?
-                              jurisdiction status match-number placement-number]}]
+                              jurisdiction status match-number placement-number
+                              referral-id]}]
   (cond-> {:candidacy/id id}
     candidate                                       (assoc :candidacy/candidate candidate)
     job-title                                           (assoc :candidacy/job-title job-title)
@@ -219,13 +220,18 @@
     jurisdiction                                                                  (assoc :candidacy/jurisdiction jurisdiction)
     status                                                                          (assoc :candidacy/status status)
     match-number                                                                      (assoc :candidacy/match-number match-number)
-    placement-number                                                                     (assoc :candidacy/placement-number placement-number)))
+    placement-number                                                                     (assoc :candidacy/placement-number placement-number)
+    ;; the 6399-side application-referral record id this candidacy arrived
+    ;; with (superproject ADR-2607131000: the human-carried handoff; the
+    ;; end-to-end story is reconstructed by joining BOTH ledgers).
+    referral-id                                                                             (assoc :candidacy/referral-id referral-id)))
 
 (def ^:private candidacy-pull
   [:candidacy/id :candidacy/candidate :candidacy/job-title :candidacy/annual-salary :candidacy/fee-rate :candidacy/claimed-fee
    :candidacy/matching-criteria-discriminatory? :candidacy/requires-work-authorization? :candidacy/work-authorization-verified?
    :candidacy/matched? :candidacy/placed?
-   :candidacy/jurisdiction :candidacy/status :candidacy/match-number :candidacy/placement-number])
+   :candidacy/jurisdiction :candidacy/status :candidacy/match-number :candidacy/placement-number
+   :candidacy/referral-id])
 
 (defn- pull->candidacy [m]
   (when (:candidacy/id m)
@@ -236,7 +242,8 @@
      :work-authorization-verified? (boolean (:candidacy/work-authorization-verified? m))
      :matched? (boolean (:candidacy/matched? m)) :placed? (boolean (:candidacy/placed? m))
      :jurisdiction (:candidacy/jurisdiction m) :status (:candidacy/status m)
-     :match-number (:candidacy/match-number m) :placement-number (:candidacy/placement-number m)}))
+     :match-number (:candidacy/match-number m) :placement-number (:candidacy/placement-number m)
+     :referral-id (:candidacy/referral-id m)}))
 
 (defrecord DatomicStore [conn]
   Store

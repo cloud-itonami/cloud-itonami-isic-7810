@@ -40,10 +40,25 @@
 
 ;; -- the build-time lifecycle (same walk as employmentops.sim) ---------------
 
-;; clean lifecycles: candidacy-1 (no work authorization required) and
-;; candidacy-6 (work authorization required AND verified) go intake ->
-;; assess -> match -> place, every actuation through a human approval.
-(doseq [[tid cid] [["a1" "candidacy-1"] ["a6" "candidacy-6"]]]
+;; the receiving side of the 6399 handoff (superproject ADR-2607131000 /
+;; this repo's ADR-0002): a candidacy that arrived via the job board's
+;; application referral JPN-REF-000000 -- the SAME record id the Meta Job
+;; Search demo shows leaving its ledger -- ingested through the real
+;; :candidacy/intake op (auto-commits when governor-clean at phase 3).
+(exec! "t0" {:op :candidacy/intake :subject "candidacy-7"
+             :patch {:id "candidacy-7" :candidate "Minato Sora" :job-title "Line Cook"
+                     :annual-salary 2900000 :fee-rate 0.2 :claimed-fee 580000.0
+                     :matching-criteria-discriminatory? false
+                     :requires-work-authorization? false :work-authorization-verified? false
+                     :matched? false :placed? false
+                     :jurisdiction "JPN" :status :intake
+                     :referral-id "JPN-REF-000000"}})
+
+;; clean lifecycles: candidacy-1 (no work authorization required),
+;; candidacy-6 (work authorization required AND verified) and the
+;; referred candidacy-7 go intake -> assess -> match -> place, every
+;; actuation through a human approval.
+(doseq [[tid cid] [["a1" "candidacy-1"] ["a6" "candidacy-6"] ["a7" "candidacy-7"]]]
   (exec! (str tid "-assess") {:op :jurisdiction/assess :subject cid})
   (exec! (str tid "-match") {:op :candidacy/match :subject cid})
   (exec! (str tid "-place") {:op :candidacy/place :subject cid}))
@@ -138,6 +153,7 @@
 (defn candidacy->json-entry [c]
   {:id (:id c) :candidate (:candidate c) :job (:job-title c)
    :jurisdiction (:jurisdiction c)
+   :referral (:referral-id c)
    :salary (str "年収 ¥" (.format yen (:annual-salary c))
                 " × " (int (* 100 (:fee-rate c))) "% = 手数料 ¥"
                 (.format yen (long (:claimed-fee c))))
