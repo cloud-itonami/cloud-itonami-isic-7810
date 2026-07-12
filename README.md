@@ -160,7 +160,10 @@ business model:
 | Operator playbook | How to fork, license, deploy and support the service in a jurisdiction |
 | Trust controls | Governance, security reporting, actuation invariant, audit requirements |
 
-See [`docs/business-model.md`](docs/business-model.md) and
+See [`docs/operator-quickstart.md`](docs/operator-quickstart.md) to go
+from fork to a private production placement desk (seed candidacies,
+jurisdiction catalog, approvals, phase rollout),
+[`docs/business-model.md`](docs/business-model.md) and
 [`docs/operator-guide.md`](docs/operator-guide.md) to start this as an
 open business on itonami.cloud, and
 [`docs/adr/0001-architecture.md`](docs/adr/0001-architecture.md) for the
