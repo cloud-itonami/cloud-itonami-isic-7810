@@ -19,8 +19,11 @@
 
   Proposal shape (all kinds):
     {:summary    str            ; human-facing draft / finding
-     :rationale  str            ; why -- SCANNED by the spec-basis gate
-     :cites      [kw|str ..]    ; facts/sources the LLM used -- SCANNED too
+     :rationale  str            ; why -- protected-attribute keywords in a
+                                 ; MATCH/PLACE rationale trigger a SOFT
+                                 ; escalation (assess rationales are exempt:
+                                 ; they legitimately quote statute names)
+     :cites      [kw|str ..]    ; facts/sources the LLM used -- SCANNED
      :effect     kw             ; how a commit would mutate the SSoT
      :stake      kw|nil         ; :actuation/match-candidate | :actuation/place-candidate | nil
      :confidence 0..1}"

@@ -173,11 +173,29 @@
   `:status` value) -- the SAME 'check a dedicated boolean, not status'
   discipline every prior governor's guards establish, informed by
   `cloud-itonami-isic-6492`'s status-lifecycle bug (ADR-2607071320)."
-  (:require [employmentops.facts :as facts]
+  (:require [clojure.string :as cstr]
+            [employmentops.facts :as facts]
             [employmentops.registry :as registry]
             [employmentops.store :as store]))
 
 (def confidence-floor 0.6)
+
+(def rationale-suspect-terms
+  "SOFT check (ported from talent.policy check 7 after live-model runs
+  showed a real LLM can write 「女性なので…」 in a rationale while its
+  structured record flags stay clean): a protected-attribute keyword in
+  a MATCH/PLACE proposal's free-text rationale escalates to a human,
+  never holds — free text is too coarse for an unoverridable gate.
+  Deliberately NOT applied to :jurisdiction/assess, whose rationales
+  legitimately quote statute names (男女雇用機会均等法 …). Extend per
+  deployment; high-precision starters only."
+  ["女性" "男性" "性別" "年齢" "妊娠" "国籍" "通院" "持病" "既婚" "未婚" "家庭"])
+
+(defn- rationale-suspect?
+  [{:keys [op]} proposal]
+  (and (contains? #{:candidacy/match :candidacy/place} op)
+       (let [r (str (:rationale proposal))]
+         (boolean (some #(cstr/includes? r %) rationale-suspect-terms)))))
 
 (def high-stakes
   "Stakes grave enough to always require a human, even when clean.
@@ -292,12 +310,14 @@
         conf (:confidence proposal 0.0)
         low? (< conf confidence-floor)
         stakes? (boolean (high-stakes (:stake proposal)))
+        suspect? (rationale-suspect? request proposal)
         hard? (boolean (seq hard))]
-    {:ok?          (and (not hard?) (not low?) (not stakes?))
+    {:ok?          (and (not hard?) (not low?) (not stakes?) (not suspect?))
      :violations   hard
      :confidence   conf
      :hard?        hard?
-     :escalate?    (and (not hard?) (or low? stakes?))
+     :escalate?    (and (not hard?) (or low? stakes? suspect?))
+     :rationale-suspect? suspect?
      :high-stakes? stakes?}))
 
 (defn hold-fact

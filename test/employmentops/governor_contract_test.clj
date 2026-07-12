@@ -12,6 +12,7 @@
     ledger fact."
   (:require [clojure.test :refer [deftest is testing]]
             [langgraph.graph :as g]
+            [employmentops.employmentopsllm :as llm]
             [employmentops.store :as store]
             [employmentops.operation :as op]))
 
@@ -170,3 +171,40 @@
       (exec-op actor "b" {:op :jurisdiction/assess :subject "candidacy-1" :no-spec? true} operator)
       (is (= 2 (count (store/ledger db)))
           "one commit + one hold, both recorded"))))
+
+(deftest rationale-only-bias-on-match-escalates-to-a-human
+  (testing "rationale-suspect (SOFT, ported from talent.policy check 7): a
+            protected keyword in a match rationale with clean store flags —
+            a live model can do this — goes to a human, never auto-commits"
+    (let [[db actor0] (fresh)
+          mock (llm/mock-advisor)
+          suspect-advisor (reify llm/Advisor
+                            (-advise [_ st req]
+                              (if (= :candidacy/match (:op req))
+                                {:summary "マッチング提案"
+                                 :rationale "女性で家庭もあるため負荷の低い職種が妥当と判断。"
+                                 :cites [(:subject req)]
+                                 :effect :candidacy/mark-matched
+                                 :value {:candidacy-id (:subject req)}
+                                 ;; even WITHOUT the actuation stake, the suspect rationale escalates
+                                 :stake nil
+                                 :confidence 0.9}
+                                (llm/-advise mock st req))))
+          actor (op/build db {:advisor suspect-advisor})]
+      (exec-op actor "t-rs-a" {:op :jurisdiction/assess :subject "candidacy-1"} operator)
+      (approve! actor "t-rs-a")
+      (let [res (exec-op actor "t-rs" {:op :candidacy/match :subject "candidacy-1"} operator)]
+        (is (= :interrupted (:status res)) "escalates for a human look")
+        (let [r2 (g/run* actor {:approval {:status :rejected :by "op-1"}}
+                         {:thread-id "t-rs" :resume? true})]
+          (is (= :hold (get-in r2 [:state :disposition])) "the human may reject")))
+      (is (some? actor0)))))
+
+(deftest assess-rationales-quoting-statutes-are-exempt
+  (testing "the mock's clean assess rationale quotes 男女雇用機会均等法 — scoped
+            exemption keeps it from tripping the suspect check"
+    (let [[_db actor] (fresh)
+          res (exec-op actor "t-rs2" {:op :jurisdiction/assess :subject "candidacy-1"} operator)]
+      (is (= :interrupted (:status res)) "escalates only via the normal phase-approval path")
+      (let [r2 (approve! actor "t-rs2")]
+        (is (= :commit (get-in r2 [:state :disposition])) "and commits on approval as before")))))
