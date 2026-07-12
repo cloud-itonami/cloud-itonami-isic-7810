@@ -110,6 +110,26 @@ work-authorization-required candidacy; a double match/placement)
 force **hold** and *cannot* be approved past; a clean match/placement
 proposal still always routes to a human.
 
+## Live demo (GitHub Pages)
+
+**<https://cloud-itonami.github.io/cloud-itonami-isic-7810/>** -- a
+static, zero-build Placement Desk demo (synthetic data). NOTHING on it
+is hand-typed (the fleet demo-page rule, superproject
+ADR-2607122300): `web/generate.cljs` (nbb) runs the FULL
+OperationActor StateGraph at build time -- two clean match+place
+lifecycles with approval interrupts, every HARD-hold kind and both
+double-actuation guards -- then renders the post-run candidacy board
+(real match/placement numbers), the real refusal verdicts and the
+append-only audit ledger. In-browser search is `web/search.cljs` run
+by scittle; `web/verify_search.cljs` is the headless nbb harness.
+
+```bash
+cd web && ../../../../node_modules/.bin/nbb \
+  --classpath "../src:../../../kotoba-lang/html/src:../../../kotoba-lang/css/src:../../../kotoba-lang/langchain/src:../../../kotoba-lang/langgraph/src" \
+  generate.cljs          # regenerate docs/index.html + docs/search.cljs
+../../../../node_modules/.bin/nbb verify_search.cljs   # headless UI logic check
+```
+
 ## Run
 
 ```bash
