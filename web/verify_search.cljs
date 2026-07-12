@@ -69,4 +69,10 @@
 (assert! (.includes html "op=:candidacy/place") "ledger has placement facts")
 (assert! (.includes html "basis=[:matching-basis-discriminatory]") "ledger has the discriminatory-match hold fact")
 
+;; check 7 analog surfaced: suspect match escalated, human rejected
+(assert! (.includes html "rationale-suspect") "check-7 section present")
+(assert! (.includes html "escalated=true") "suspect match escalated (not auto, not hard-held)")
+(assert! (.includes html "人間が却下 → hold") "human rejection recorded on the page")
+(assert! (.includes (board-html) "Sora Aoi") "candidacy-8 on the board (unmatched)")
+
 (println "verify_search: all assertions passed")
