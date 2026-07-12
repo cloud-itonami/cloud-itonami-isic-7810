@@ -51,6 +51,12 @@
 (assert! (= "" (board-html)) "no-hit query renders no cards")
 (assert! (false? (boolean (aget (get elements "empty") "hidden"))) "no-hit reveals empty notice")
 
+;; the receiving side of the handoff (superproject ADR-2607131000 /
+;; repo ADR-0002): the referred candidacy went through the full desk
+(assert! (.includes (board-html) "Minato Sora") "referred candidacy-7 on the board")
+(assert! (.includes (board-html) "紹介経由 JPN-REF-000000") "candidacy-7 carries the 6399 referral record id")
+(assert! (.includes (board-html) "JPN-PLC-000002") "referred candidacy placed through the same governed lifecycle")
+
 ;; the transparency table carries the REAL run verdicts (all hold kinds)
 (doseq [rule ["no-spec-basis" "matching-basis-discriminatory" "placement-fee-mismatch"
               "work-authorization-unverified" "already-matched" "already-placed"]]
