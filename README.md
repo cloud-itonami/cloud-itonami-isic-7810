@@ -113,6 +113,13 @@ proposal still always routes to a human.
 ## Live demo (GitHub Pages)
 
 **<https://cloud-itonami.github.io/cloud-itonami-isic-7810/>** -- a
+static demo. Want to run this as a local placement desk?
+[**Register operator interest**](https://github.com/cloud-itonami/cloud-itonami-isic-7810/issues/new?template=operator-interest.yml)
+-- see [`docs/business-model.md`](docs/business-model.md) for the
+revenue model and [`docs/operator-quickstart.md`](docs/operator-quickstart.md)
+for the fork-to-published walkthrough.
+
+The demo above is a
 static, zero-build Placement Desk demo (synthetic data). NOTHING on it
 is hand-typed (the fleet demo-page rule, superproject
 ADR-2607122300): `web/generate.cljs` (nbb) runs the FULL

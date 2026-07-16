@@ -5,6 +5,7 @@
 .badge.hold { background: var(--hold-bg); color: var(--hold-fg); }
 input#q { flex: 1; font-size: 16px; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
 td { border-bottom: 1px solid var(--line); padding: 7px 8px; vertical-align: top; }
+footer p.cta { font-size: 15px; font-weight: 600; color: var(--fg); margin-bottom: 14px; }
 body { font-family: system-ui,-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif; margin: 0 auto; max-width: 880px; padding: 28px 20px 48px; color: var(--fg); background: var(--bg); line-height: 1.55; }
 footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
 h2 { font-size: 17px; margin-top: 40px; border-top: 1px solid var(--line); padding-top: 24px; }
@@ -136,6 +137,9 @@ approval-rejected · op=:candidacy/match · subject=candidacy-8 · disposition=h
       <li>すべての決定が追記専用の監査台帳に残る</li>
     </ul>
     <footer>
+      <p class="cta">
+        <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/issues/new?template=operator-interest.yml">🡒 地域でこの職業紹介デスクを運営したい方はこちら(operator-interest)</a>
+      </p>
       <p>OSS (AGPL-3.0-or-later)。fork して地域の職業紹介デスクとして運営できます — <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/business-model.md">business model</a> · <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/operator-guide.md">operator guide</a> · 姉妹デモ: <a href="/cloud-itonami-isic-6399/">Meta Job Search</a> / <a href="/cloud-itonami-isic-6310/">Talent Board</a> · <a href="/">fleet catalog</a>。このページは <code>web/generate.cljs</code> (nbb) が実 actor を実行して生成し、検索は <code>search.cljs</code> (scittle = ブラウザ内 ClojureScript) が実行しています。</p>
     </footer>
     <script type="application/json" id="board-data">[{"id":"candidacy-1","candidate":"Kita Taro","job":"Warehouse Associate","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,000,000 × 20% = 手数料 ¥600,000","matched":"JPN-MTC-000000","placed":"JPN-PLC-000000"},{"id":"candidacy-2","candidate":"Atlantis Ann","job":"Warehouse Associate","jurisdiction":"ATL","referral":null,"salary":"年収 ¥2,000,000 × 20% = 手数料 ¥400,000","matched":null,"placed":null},{"id":"candidacy-3","candidate":"Minami Hana","job":"Machine Operator","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,500,000 × 20% = 手数料 ¥800,000","matched":"JPN-MTC-000003","placed":null},{"id":"candidacy-4","candidate":"Higashi Ichiro","job":"Delivery Driver","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,200,000 × 20% = 手数料 ¥640,000","matched":null,"placed":null},{"id":"candidacy-5","candidate":"Nishi Kenji","job":"Line Cook","jurisdiction":"JPN","referral":null,"salary":"年収 ¥2,800,000 × 20% = 手数料 ¥560,000","matched":"JPN-MTC-000004","placed":null},{"id":"candidacy-6","candidate":"Chuo Yuki","job":"Line Cook","jurisdiction":"JPN","referral":null,"salary":"年収 ¥2,900,000 × 20% = 手数料 ¥580,000","matched":"JPN-MTC-000001","placed":"JPN-PLC-000001"},{"id":"candidacy-7","candidate":"Minato Sora","job":"Line Cook","jurisdiction":"JPN","referral":"JPN-REF-000000","salary":"年収 ¥2,900,000 × 20% = 手数料 ¥580,000","matched":"JPN-MTC-000002","placed":"JPN-PLC-000002"},{"id":"candidacy-8","candidate":"Sora Aoi","job":"Warehouse Associate","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,100,000 × 20% = 手数料 ¥620,000","matched":null,"placed":null}]</script>

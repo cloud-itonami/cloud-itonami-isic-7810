@@ -178,6 +178,7 @@
             :font-size 12.5 :line-height 1.7}
      "footer" {:margin-top 48 :padding-top 16 :border-top "1px solid var(--line)"
                :color "var(--muted)" :font-size 13.5}
+     "footer p.cta" {:font-size 15 :font-weight 600 :color "var(--fg)" :margin-bottom 14}
      "a" {:color "var(--accent)"}
      "code" {:background "var(--card)" :padding "1px 5px" :border-radius 4
              :font-size "0.9em"}}
@@ -262,6 +263,8 @@
      [:li "すべての決定が追記専用の監査台帳に残る"]]
 
     [:footer
+     [:p.cta [:a {:href "https://github.com/cloud-itonami/cloud-itonami-isic-7810/issues/new?template=operator-interest.yml"}
+              "🡒 地域でこの職業紹介デスクを運営したい方はこちら(operator-interest)"]]
      [:p "OSS (AGPL-3.0-or-later)。fork して地域の職業紹介デスクとして運営できます — "
       [:a {:href "https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/business-model.md"} "business model"]
       " · "
