@@ -4,6 +4,15 @@ The shortest path from forking this repo to running a governed
 employment-agency instance. This is the concrete version of
 `docs/business-model.md`'s operator layer.
 
+## Who this is for
+
+You're an employment-agency operator, workforce program, or labor-management organization who:
+- Runs placements today without systematic compliance scaffolding
+- Faces civil-rights liability risk from discriminatory matches, fee mismatches, or unverified work authorization
+- Wants to keep candidate data private (no ATS SaaS data lock-in)
+- Can commit to hosting and supporting the infrastructure yourself
+- Holds or can obtain the operating license required in your jurisdiction
+
 **Like the Talent Board sibling (isic-6310), nothing here goes on
 public Pages with real data.** Candidacies are personal data — the
 live demo is synthetic; your instance runs privately. The public side

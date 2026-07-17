@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="ja">
-  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Placement Desk — governed employment agency (cloud-itonami-isic-7810)</title><meta name="description" content="地域職業紹介の governed OSS 実装デモ。差別的マッチング・手数料不一致・就労資格未確認は独立ガバナーが人間の承認でも覆せない HOLD にする。"><style>table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 13.5px; }
+<html lang="en">
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Community Employment Agency — governed placement desk (cloud-itonami-isic-7810)</title><meta name="description" content="Open-source governed employment agency. Discriminatory matches, fee mismatches, and unverified work authorization are held by an independent Governor — no human approval can override these HARD checks."><style>table { border-collapse: collapse; width: 100%; margin-top: 12px; font-size: 13.5px; }
 :root { --bg: #ffffff; --line: #d0d7de; --muted: #57606a; --accent: #0b5cad; --hold-bg: #ffebe9; --ok-fg: #116329; --card: #f6f8fa; --ok-bg: #dafbe1; --fg: #1b1f24; --hold-fg: #a40e26; }
 .badge.hold { background: var(--hold-bg); color: var(--hold-fg); }
 input#q { flex: 1; font-size: 16px; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
 td { border-bottom: 1px solid var(--line); padding: 7px 8px; vertical-align: top; }
 footer p.cta { font-size: 15px; font-weight: 600; color: var(--fg); margin-bottom: 14px; }
-body { font-family: system-ui,-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif; margin: 0 auto; max-width: 880px; padding: 28px 20px 48px; color: var(--fg); background: var(--bg); line-height: 1.55; }
+body { font-family: system-ui,-apple-system,sans-serif; margin: 0 auto; max-width: 880px; padding: 28px 20px 48px; color: var(--fg); background: var(--bg); line-height: 1.55; }
 footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
 h2 { font-size: 17px; margin-top: 40px; border-top: 1px solid var(--line); padding-top: 24px; }
 .card .meta { color: var(--muted); font-size: 13.5px; }
@@ -24,34 +24,41 @@ header p.sub { color: var(--muted); margin-top: 4px; }
 h1 { font-size: 24px; margin: 0; }
 th { text-align: left; color: var(--muted); font-weight: 600; border-bottom: 1.5px solid var(--line); padding: 6px 8px; }
 code { background: var(--card); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+ul { margin: 12px 0; }
+li { margin-bottom: 8px; }
 @media (prefers-color-scheme: dark) { :root { --bg: #0d1117; --line: #30363d; --muted: #8d96a0; --accent: #58a6ff; --hold-bg: #2d1215; --ok-fg: #3fb950; --card: #161b22; --ok-bg: #12261e; --fg: #e6edf3; --hold-fg: #f85149; } }</style></head>
   <body>
     <header>
-      <h1>Placement Desk <span class="badge ok">governed</span></h1>
-      <p class="sub">職業紹介デスク — マッチングと配置は必ず人間の承認を経て、独立ガバナーの HARD check(差別的マッチング基準・紹介手数料の独立再計算・就労資格確認)を人間の承認でも覆せない。 <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810">cloud-itonami-isic-7810</a> のライブデモ(合成データ)。このページの内容はすべて、生成時に実 actor(StateGraph + Governor)を実行した結果です。求人票の収集・掲載側は姉妹デモ <a href="/cloud-itonami-isic-6399/">Meta Job Search</a> が担います。</p>
+      <h1>Community Employment Agency <span class="badge ok">governed</span></h1>
+      <p class="sub"><strong>The problem:</strong> Employment agencies face regulatory liability when matching and placing candidates — discriminatory matches, fee miscalculations, and unverified work authorization can expose agencies to civil-rights violations and compliance penalties.</p>
+      <p class="sub"><strong>Our differentiator:</strong> An independent Employment Agency Governor verifies every match and placement against legal requirements. Discriminatory matching bases, placement-fee mismatches, and unverified work authorizations trigger HARD holds that no human approval can override—preventing unsafe commits before they happen.</p>
+      <p class="sub"><strong>What it is not:</strong> This does not hold a jurisdiction's operating license (your responsibility), nor does it replace candidate sourcing, screening, or fit judgment. It is the compliance scaffold—independent verification that catches regulatory violations before deployment.</p>
     </header>
-    <div class="search"><input id="q" type="search" placeholder="候補者・職種で検索…" autocomplete="off"></div>
+    <div style="margin-top: 28px; padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 10px;">
+      <p style="margin-top: 0;"><strong>Live demo below</strong> runs the full actor and Governor through synthetic data. Every table below reflects real code execution, not hardcoded values.</p>
+    </div>
+    <div class="search"><input id="q" type="search" placeholder="Search candidacy or role..." autocomplete="off"></div>
     <div id="board"></div>
-    <p id="empty" hidden>該当する candidacy はありません。</p>
-    <h2>Governor transparency — 拒否されたマッチング/配置</h2>
-    <p>この表はハードコードではなく、ページ生成時に実際の OperationActor へマッチング/配置を試行させ、<a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/src/employmentops/governor.cljc">Employment Agency Governor</a> が拒否した実判定です(HARD violation は人間の承認でも覆せません)。</p>
+    <p id="empty" hidden>No matching candidacy found.</p>
+    <h2>Governor hard violations — held placements</h2>
+    <p>The table below is not hardcoded. At page generation, the live OperationActor attempted each match and placement; these are the real <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/src/employmentops/governor.cljc">Employment Agency Governor</a> verdicts. HARD violations are never overridable by human approval.</p>
     <table>
       <thead>
         <tr>
-          <th>candidacy</th>
-          <th>HARD check</th>
-          <th>理由</th>
+          <th>Candidacy</th>
+          <th>HARD violation</th>
+          <th>Reason</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Atlantis Ann</strong><br><span class="meta">Warehouse Associate · ATL · candidacy-2 · 法域アセスメント時点で拒否</span></td>
+          <td><strong>Atlantis Ann</strong><br><span class="meta">Warehouse Associate · ATL · candidacy-2 · rejected at jurisdiction assessment</span></td>
           <td>
             <span>
               <span><span class="badge hold">no-spec-basis</span> </span>
             </span>
           </td>
-          <td>公式spec-basisの引用が無い提案は法域要件として扱えない</td>
+          <td>Proposal lacks official spec-basis citation; cannot be treated as regulatory requirement</td>
         </tr>
         <tr>
           <td><strong>Higashi Ichiro</strong><br><span class="meta">Delivery Driver · JPN · candidacy-4</span></td>
@@ -60,7 +67,7 @@ code { background: var(--card); padding: 1px 5px; border-radius: 4px; font-size:
               <span><span class="badge hold">matching-basis-discriminatory</span> </span>
             </span>
           </td>
-          <td>candidacy-4 のマッチング基準が保護属性に基づく可能性がある</td>
+          <td>Matching criteria for candidacy-4 may be based on protected characteristics</td>
         </tr>
         <tr>
           <td><strong>Minami Hana</strong><br><span class="meta">Machine Operator · JPN · candidacy-3</span></td>
@@ -69,7 +76,7 @@ code { background: var(--card); padding: 1px 5px; border-radius: 4px; font-size:
               <span><span class="badge hold">placement-fee-mismatch</span> </span>
             </span>
           </td>
-          <td>candidacy-3 の申告紹介手数料(800000)が独立再計算値(700000)と一致しない</td>
+          <td>Claimed placement fee (¥800,000) does not match independent recomputation (¥700,000)</td>
         </tr>
         <tr>
           <td><strong>Nishi Kenji</strong><br><span class="meta">Line Cook · JPN · candidacy-5</span></td>
@@ -78,71 +85,72 @@ code { background: var(--card); padding: 1px 5px; border-radius: 4px; font-size:
               <span><span class="badge hold">work-authorization-unverified</span> </span>
             </span>
           </td>
-          <td>candidacy-5 は在留資格/就労許可の確認を要するが未確認 -- 配置提案は進められない</td>
+          <td>Candidacy-5 requires work authorization verification; unverified—cannot proceed to placement</td>
         </tr>
         <tr>
-          <td><strong>Kita Taro</strong><br><span class="meta">Warehouse Associate · JPN · candidacy-1 · 二重マッチングの試行</span></td>
+          <td><strong>Kita Taro</strong><br><span class="meta">Warehouse Associate · JPN · candidacy-1 · double-match attempted</span></td>
           <td>
             <span>
               <span><span class="badge hold">already-matched</span> </span>
             </span>
           </td>
-          <td>candidacy-1 は既にマッチング済み</td>
+          <td>Candidacy-1 already matched</td>
         </tr>
         <tr>
-          <td><strong>Kita Taro</strong><br><span class="meta">Warehouse Associate · JPN · candidacy-1 · 二重配置の試行</span></td>
+          <td><strong>Kita Taro</strong><br><span class="meta">Warehouse Associate · JPN · candidacy-1 · double-placement attempted</span></td>
           <td>
             <span>
               <span><span class="badge hold">already-placed</span> </span>
             </span>
           </td>
-          <td>candidacy-1 は既に配置済み</td>
+          <td>Candidacy-1 already placed</td>
         </tr>
       </tbody>
     </table>
-    <h2>check 7 — rationale-suspect (SOFT, 実LLM対策)</h2>
-    <p>記録フラグはクリーンなまま、自由記述の rationale に「女性で…」と書くマッチング提案(実 LLM の失敗様式)は、HARD hold でなく人間レビューへ回ります(自由文の語句照合は誤検知があるため、コストを『抑圧』でなく『人間の一瞥』に固定する設計)。この実行では: escalated=true / rationale-suspect=true / 人間が却下 → hold。</p>
-    <h2>監査台帳 — 上の全実行が実際に書いた追記専用レコード</h2>
-    <p>intake・アセスメント・マッチング・配置・拒否のすべてが不変の台帳に残ります。以下はページ生成時の実 actor 実行が書いた事実そのものです。</p>
+    <h2>Immutable audit ledger</h2>
+    <p>Every intake, assessment, match, placement, and refusal is logged to an append-only ledger. Below is the actual ledger written by page-generation actor execution.</p>
     <pre>committed · op=:candidacy/intake · subject=candidacy-7 · disposition=commit · basis=[:candidate :jurisdiction :fee-rate :requires-work-authorization? :job-title :placed? :referral-id :status :id :annual-salary :claimed-fee :matched? :work-authorization-verified? :matching-criteria-discriminatory?]
-committed · op=:jurisdiction/assess · subject=candidacy-1 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
-committed · op=:candidacy/match · subject=candidacy-1 · disposition=commit · basis=[&quot;candidacy-1&quot;]
-committed · op=:candidacy/place · subject=candidacy-1 · disposition=commit · basis=[&quot;candidacy-1&quot;]
-committed · op=:jurisdiction/assess · subject=candidacy-6 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
-committed · op=:candidacy/match · subject=candidacy-6 · disposition=commit · basis=[&quot;candidacy-6&quot;]
-committed · op=:candidacy/place · subject=candidacy-6 · disposition=commit · basis=[&quot;candidacy-6&quot;]
-committed · op=:jurisdiction/assess · subject=candidacy-7 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
-committed · op=:candidacy/match · subject=candidacy-7 · disposition=commit · basis=[&quot;candidacy-7&quot;]
-committed · op=:candidacy/place · subject=candidacy-7 · disposition=commit · basis=[&quot;candidacy-7&quot;]
+committed · op=:jurisdiction/assess · subject=candidacy-1 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
+committed · op=:candidacy/match · subject=candidacy-1 · disposition=commit · basis=["candidacy-1"]
+committed · op=:candidacy/place · subject=candidacy-1 · disposition=commit · basis=["candidacy-1"]
+committed · op=:jurisdiction/assess · subject=candidacy-6 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
+committed · op=:candidacy/match · subject=candidacy-6 · disposition=commit · basis=["candidacy-6"]
+committed · op=:candidacy/place · subject=candidacy-6 · disposition=commit · basis=["candidacy-6"]
+committed · op=:jurisdiction/assess · subject=candidacy-7 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
+committed · op=:candidacy/match · subject=candidacy-7 · disposition=commit · basis=["candidacy-7"]
+committed · op=:candidacy/place · subject=candidacy-7 · disposition=commit · basis=["candidacy-7"]
 governor-hold · op=:jurisdiction/assess · subject=candidacy-2 · disposition=hold · basis=[:no-spec-basis]
-committed · op=:jurisdiction/assess · subject=candidacy-4 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
+committed · op=:jurisdiction/assess · subject=candidacy-4 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
 governor-hold · op=:candidacy/match · subject=candidacy-4 · disposition=hold · basis=[:matching-basis-discriminatory]
-committed · op=:jurisdiction/assess · subject=candidacy-3 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
-committed · op=:candidacy/match · subject=candidacy-3 · disposition=commit · basis=[&quot;candidacy-3&quot;]
+committed · op=:jurisdiction/assess · subject=candidacy-3 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
+committed · op=:candidacy/match · subject=candidacy-3 · disposition=commit · basis=["candidacy-3"]
 governor-hold · op=:candidacy/place · subject=candidacy-3 · disposition=hold · basis=[:placement-fee-mismatch]
-committed · op=:jurisdiction/assess · subject=candidacy-5 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
-committed · op=:candidacy/match · subject=candidacy-5 · disposition=commit · basis=[&quot;candidacy-5&quot;]
+committed · op=:jurisdiction/assess · subject=candidacy-5 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
+committed · op=:candidacy/match · subject=candidacy-5 · disposition=commit · basis=["candidacy-5"]
 governor-hold · op=:candidacy/place · subject=candidacy-5 · disposition=hold · basis=[:work-authorization-unverified]
 governor-hold · op=:candidacy/match · subject=candidacy-1 · disposition=hold · basis=[:already-matched]
 governor-hold · op=:candidacy/place · subject=candidacy-1 · disposition=hold · basis=[:already-placed]
 committed · op=:candidacy/intake · subject=candidacy-8 · disposition=commit · basis=[:candidate :jurisdiction :fee-rate :requires-work-authorization? :job-title :placed? :status :id :annual-salary :claimed-fee :matched? :work-authorization-verified? :matching-criteria-discriminatory?]
-committed · op=:jurisdiction/assess · subject=candidacy-8 · disposition=commit · basis=[&quot;職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act)&quot; &quot;https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/&quot;]
+committed · op=:jurisdiction/assess · subject=candidacy-8 · disposition=commit · basis=["Employment Security Act (Japan)" "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/"]
 approval-rejected · op=:candidacy/match · subject=candidacy-8 · disposition=hold · basis=[:approver-rejected]</pre>
-    <h2>この紹介デスクが保証すること</h2>
+    <h2>What this guarantees</h2>
     <ul>
-      <li>マッチング基準に保護属性が使われた candidacy は載らない(<strong>公正性</strong> — 均等法5条 / Title VII / Equality Act / AGG)</li>
-      <li>紹介手数料は「年収 × 手数料率」の独立再計算と常に一致する</li>
-      <li>就労資格の確認を要する候補者は、未確認のまま配置されない(入管法 / I-9 / right-to-work / AufenthG §4a)</li>
-      <li>マッチングも配置も、どの phase でも自動実行されない — 常に人間の承認</li>
-      <li>すべての決定が追記専用の監査台帳に残る</li>
+      <li>No candidacy with discriminatory matching criteria will be placed</li>
+      <li>Placement fees always match independent recomputation (salary × fee rate)</li>
+      <li>Candidates requiring work authorization cannot be placed without verification</li>
+      <li>Matching and placement are never autonomous—always require human approval</li>
+      <li>Every decision is permanently logged to the audit ledger</li>
     </ul>
     <footer>
       <p class="cta">
-        <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/issues/new?template=operator-interest.yml">🡒 地域でこの職業紹介デスクを運営したい方はこちら(operator-interest)</a>
+        <strong>Ready to deploy?</strong> <a href="https://itonami.cloud/isco-1212/">Claim your free tenant →</a>
       </p>
-      <p>OSS (AGPL-3.0-or-later)。fork して地域の職業紹介デスクとして運営できます — <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/business-model.md">business model</a> · <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/operator-guide.md">operator guide</a> · 姉妹デモ: <a href="/cloud-itonami-isic-6399/">Meta Job Search</a> / <a href="/cloud-itonami-isic-6310/">Talent Board</a> · <a href="/">fleet catalog</a>。このページは <code>web/generate.cljs</code> (nbb) が実 actor を実行して生成し、検索は <code>search.cljs</code> (scittle = ブラウザ内 ClojureScript) が実行しています。</p>
+      <p class="cta">
+        <strong>Want to go live now?</strong> <a href="https://itonami.cloud/docs/go-live.md">See the paid path →</a>
+      </p>
+      <p>Open source (AGPL-3.0-or-later). Fork and run your own agency: <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810">cloud-itonami-isic-7810</a> · <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/operator-quickstart.md">operator quickstart</a> · <a href="https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/docs/business-model.md">business model</a>. This page runs <code>web/generate.cljs</code> (nbb) at build time—every table above is live actor output, not synthetic data.</p>
     </footer>
-    <script type="application/json" id="board-data">[{"id":"candidacy-1","candidate":"Kita Taro","job":"Warehouse Associate","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,000,000 × 20% = 手数料 ¥600,000","matched":"JPN-MTC-000000","placed":"JPN-PLC-000000"},{"id":"candidacy-2","candidate":"Atlantis Ann","job":"Warehouse Associate","jurisdiction":"ATL","referral":null,"salary":"年収 ¥2,000,000 × 20% = 手数料 ¥400,000","matched":null,"placed":null},{"id":"candidacy-3","candidate":"Minami Hana","job":"Machine Operator","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,500,000 × 20% = 手数料 ¥800,000","matched":"JPN-MTC-000003","placed":null},{"id":"candidacy-4","candidate":"Higashi Ichiro","job":"Delivery Driver","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,200,000 × 20% = 手数料 ¥640,000","matched":null,"placed":null},{"id":"candidacy-5","candidate":"Nishi Kenji","job":"Line Cook","jurisdiction":"JPN","referral":null,"salary":"年収 ¥2,800,000 × 20% = 手数料 ¥560,000","matched":"JPN-MTC-000004","placed":null},{"id":"candidacy-6","candidate":"Chuo Yuki","job":"Line Cook","jurisdiction":"JPN","referral":null,"salary":"年収 ¥2,900,000 × 20% = 手数料 ¥580,000","matched":"JPN-MTC-000001","placed":"JPN-PLC-000001"},{"id":"candidacy-7","candidate":"Minato Sora","job":"Line Cook","jurisdiction":"JPN","referral":"JPN-REF-000000","salary":"年収 ¥2,900,000 × 20% = 手数料 ¥580,000","matched":"JPN-MTC-000002","placed":"JPN-PLC-000002"},{"id":"candidacy-8","candidate":"Sora Aoi","job":"Warehouse Associate","jurisdiction":"JPN","referral":null,"salary":"年収 ¥3,100,000 × 20% = 手数料 ¥620,000","matched":null,"placed":null}]</script>
+    <script type="application/json" id="board-data">[{"id":"candidacy-1","candidate":"Kita Taro","job":"Warehouse Associate","jurisdiction":"JPN","referral":null,"salary":"Salary ¥3,000,000 × 20% = Fee ¥600,000","matched":"JPN-MTC-000000","placed":"JPN-PLC-000000"},{"id":"candidacy-2","candidate":"Atlantis Ann","job":"Warehouse Associate","jurisdiction":"ATL","referral":null,"salary":"Salary ¥2,000,000 × 20% = Fee ¥400,000","matched":null,"placed":null},{"id":"candidacy-3","candidate":"Minami Hana","job":"Machine Operator","jurisdiction":"JPN","referral":null,"salary":"Salary ¥3,500,000 × 20% = Fee ¥800,000","matched":"JPN-MTC-000003","placed":null},{"id":"candidacy-4","candidate":"Higashi Ichiro","job":"Delivery Driver","jurisdiction":"JPN","referral":null,"salary":"Salary ¥3,200,000 × 20% = Fee ¥640,000","matched":null,"placed":null},{"id":"candidacy-5","candidate":"Nishi Kenji","job":"Line Cook","jurisdiction":"JPN","referral":null,"salary":"Salary ¥2,800,000 × 20% = Fee ¥560,000","matched":"JPN-MTC-000004","placed":null},{"id":"candidacy-6","candidate":"Chuo Yuki","job":"Line Cook","jurisdiction":"JPN","referral":null,"salary":"Salary ¥2,900,000 × 20% = Fee ¥580,000","matched":"JPN-MTC-000001","placed":"JPN-PLC-000001"},{"id":"candidacy-7","candidate":"Minato Sora","job":"Line Cook","jurisdiction":"JPN","referral":"JPN-REF-000000","salary":"Salary ¥2,900,000 × 20% = Fee ¥580,000","matched":"JPN-MTC-000002","placed":"JPN-PLC-000002"},{"id":"candidacy-8","candidate":"Sora Aoi","job":"Warehouse Associate","jurisdiction":"JPN","referral":null,"salary":"Salary ¥3,100,000 × 20% = Fee ¥620,000","matched":null,"placed":null}]</script>
     <script src="https://cdn.jsdelivr.net/npm/scittle@0.6.22/dist/scittle.js"></script>
     <script type="application/x-scittle" src="search.cljs"></script>
   </body>
