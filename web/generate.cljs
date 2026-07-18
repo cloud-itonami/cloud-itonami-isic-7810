@@ -181,7 +181,18 @@
      "footer p.cta" {:font-size 15 :font-weight 600 :color "var(--fg)" :margin-bottom 14}
      "a" {:color "var(--accent)"}
      "code" {:background "var(--card)" :padding "1px 5px" :border-radius 4
-             :font-size "0.9em"}}
+             :font-size "0.9em"}
+     ".pitch" {:background "var(--card)" :border "1px solid var(--line)"
+               :border-radius 12 :padding "20px 22px" :margin-top 20}
+     ".pitch h2" {:margin-top 0 :border-top "none" :padding-top 0 :font-size 18}
+     ".pitch table" {:margin-top 14}
+     ".pitch .ctarow" {:display :flex :gap 10 :flex-wrap :wrap :margin-top 18}
+     ".btn" {:display :inline-block :font-size 14 :font-weight 700
+             :padding "10px 18px" :border-radius 8 :text-decoration :none}
+     ".btn.primary" {:background "var(--accent)" :color "#ffffff"}
+     ".btn.secondary" {:background "transparent" :color "var(--fg)"
+                       :border "1.5px solid var(--line)"}
+     ".pitch .fine" {:color "var(--muted)" :font-size 12.5 :margin-top 10}}
     :media
     {"(prefers-color-scheme: dark)"
      {":root" {:--fg "#e6edf3" :--bg "#0d1117" :--muted "#8d96a0"
@@ -204,9 +215,9 @@
    [:head
     [:meta {:charset "utf-8"}]
     [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
-    [:title "Placement Desk — governed employment agency (cloud-itonami-isic-7810)"]
+    [:title "Bullhorn・Crelate 代替 ATS — 席数無制限 定額 ¥80,000/月 | Placement Desk (cloud-itonami-isic-7810)"]
     [:meta {:name "description"
-            :content "地域職業紹介の governed OSS 実装デモ。差別的マッチング・手数料不一致・就労資格未確認は独立ガバナーが人間の承認でも覆せない HOLD にする。"}]
+            :content "地域職業紹介向けATS。Bullhorn・Crelate・JobAdder・Zoho Recruitはすべて1席課金 — このデスクは席数無制限の定額制で、就労資格未確認の配置は独立ガバナーが人間の承認でも覆せずHOLDする。"}]
     stylesheet]
    [:body
     [:header
@@ -217,6 +228,33 @@
       " のライブデモ(合成データ)。このページの内容はすべて、生成時に実 actor(StateGraph + Governor)を実行した結果です。"
       "求人票の収集・掲載側は姉妹デモ "
       [:a {:href "/cloud-itonami-isic-6399/"} "Meta Job Search"] " が担います。"]]
+
+    [:div.pitch
+     [:h2 "今お使いのATS、1席いくらですか?"]
+     [:p "Crelate・JobAdder・Zoho Recruit・Bullhorn — 主要ATSはすべて「採用担当者1人あたり」の"
+      "席数課金です。スタッフが増えるほど、費用も比例して膨らみます。このデスクは"
+      [:strong " 席数無制限・定額 ¥80,000/月"] "。3〜5人の小規模紹介事業所であれば、多くの場合"
+      "既存ATSの実支出(¥22,000〜90,000+/月、上位プランはさらに高額)を下回ります。"]
+     [:table
+      [:thead [:tr [:th "ATS"] [:th "課金方式"] [:th "実勢価格"]]]
+      [:tbody
+       [:tr [:td "Crelate"] [:td "1席課金(5席から)"] [:td "$119/席/月〜"]]
+       [:tr [:td "JobAdder"] [:td "1席課金"] [:td "$99〜160/席/月(参考値)"]]
+       [:tr [:td "Zoho Recruit (Staffing)"] [:td "1席課金"] [:td "$25〜75/席/月"]]
+       [:tr [:td "Bullhorn"] [:td "1席課金"] [:td "$99〜315/席/月(参考値)"]]
+       [:tr [:td [:strong "このデスク"]] [:td [:strong "席数無制限・定額"]] [:td [:strong "¥80,000/月"]]]]]
+     [:p "さらに、就労資格(入管法 / I-9 / right-to-work / AufenthG §4a)の未確認配置を"
+      [:strong "独立ガバナーが構造的にブロック"] "— 4社とも、これを覆せないハード制御としては"
+      "実装していません。設定ミスでも、承認者の見落としでも、未確認配置が素通りしません。"]
+     [:div.ctarow
+      [:a.btn.primary {:href "https://buy.stripe.com/3cIcN474ncW48yA0VNbMQ0d"}
+       "🡒 Managed Placement Desk を購読(¥80,000/月)"]
+      [:a.btn.secondary {:href "https://github.com/cloud-itonami/cloud-itonami-isic-7810/issues/new?template=operator-interest.yml"}
+       "自前運用(セルフホスト)に興味がある"]]
+     [:p.fine "価格根拠: "
+      [:a {:href "https://github.com/com-junkawasaki/root/blob/main/90-docs/pricing-intelligence/pricing-intelligence-ledger.edn"}
+       "4社の実競合調査(2026-07-16)"]
+      " — 下の技術デモは合成データによる実 actor 実行結果、この価格比較表とは独立して生成されています。"]]
 
     [:div.search
      [:input {:id "q" :type "search" :placeholder "候補者・職種で検索…" :autocomplete "off"}]]
