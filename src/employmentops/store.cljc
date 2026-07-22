@@ -32,10 +32,9 @@
   employment agency or workforce program trusting an operator needs,
   and the evidence an operator needs if a match or a placement is
   later disputed."
-  (:require #?(:clj  [clojure.edn :as edn]
-               :cljs [cljs.reader :as edn])
-            [employmentops.registry :as registry]
-            [langchain.db :as d]))
+  (:require [employmentops.registry :as registry]
+            [langchain.db :as d]
+            [langchain-store.core :as ls]))
 
 (defprotocol Store
   (candidacy [s id])
@@ -197,8 +196,8 @@
    :match-sequence/jurisdiction        {:db/unique :db.unique/identity}
    :placement-sequence/jurisdiction    {:db/unique :db.unique/identity}})
 
-(defn- enc [v] (pr-str v))
-(defn- dec* [s] (when s (edn/read-string s)))
+(defn- enc [v] (ls/enc v))
+(defn- dec* [s] (ls/dec* s))
 
 (defn- candidacy->tx [{:keys [id candidate job-title annual-salary fee-rate claimed-fee
                               matching-criteria-discriminatory?
