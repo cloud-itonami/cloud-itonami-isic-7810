@@ -3,32 +3,38 @@
 ;; sibling demo pages. Data is the JSON the generator embedded from the
 ;; REAL post-run employmentops.store.
 (ns placement.board)
+;;
+;; カードは **hiccup で組み html.core が文字列化する** — 生 HTML の文字列連結は
+;; しない(生成側 generate.cljs と同じ規約)。html.core が属性値もテキストも
+;; エスケープするので自前の esc は不要になった。html_core.cljs は
+;; generate.cljs がページと一緒に同梱する。
+;;
+;; html.core は ns の :require ではなく **完全修飾**で呼ぶ — headless ハーネス
+;; (verify_search.cljs)がこのファイルを load-string で評価するが、nbb の
+;; load-string は ns の :require を解決できないため(実測 "Doesn't support name:")。
+;;
+;; 子の並びは必ず [:<> ...] フラグメントで包む — 素のベクタだとヒット0件のとき
+;; `[]` になり html.core がタグ付きノードと解釈して落ちる。
+
 
 (def candidacies
   (js->clj (js/JSON.parse (.-textContent (js/document.getElementById "board-data")))
            :keywordize-keys true))
 
-(defn- esc [s]
-  (-> (str s)
-      (.replaceAll "&" "&amp;")
-      (.replaceAll "<" "&lt;")
-      (.replaceAll ">" "&gt;")))
+(defn- chip [label] [:span {:class "chip"} label])
 
 ;; dds-ext-card は jp-go-dds の layout 拡張(生成側の静的カードと同じ見た目)、
 ;; pd-card は本ページ固有の中身の字送り。どちらも generate.cljs 側で定義済み。
-(defn- card-html [c]
-  (str "<div class=\"dds-ext-card pd-card\">"
-       "<h3>" (esc (:candidate c)) "</h3>"
-       "<div class=\"meta\">" (esc (:job c)) " · " (esc (:jurisdiction c)) "</div>"
-       "<div class=\"meta\">" (esc (:salary c)) " <span class=\"meta\">(独立再計算一致)</span></div>"
-       (when (:matched c)
-         (str "<span class=\"chip\">マッチ " (esc (:matched c)) "</span>"))
-       (when (:placed c)
-         (str "<span class=\"chip\">配置 " (esc (:placed c)) "</span>"))
-       (when (:referral c)
-         (str "<span class=\"chip\">紹介経由 " (esc (:referral c))
-              "</span> <span class=\"meta\">(Meta Job Search からの referral)</span>"))
-       "</div>"))
+(defn- card [c]
+  [:div {:class "dds-ext-card pd-card"}
+   [:h3 (:candidate c)]
+   [:div {:class "meta"} (:job c) " · " (:jurisdiction c)]
+   [:div {:class "meta"} (:salary c) " " [:span {:class "meta"} "(独立再計算一致)"]]
+   (when (:matched c) (chip (str "マッチ " (:matched c))))
+   (when (:placed c) (chip (str "配置 " (:placed c))))
+   (when (:referral c)
+     [:<> (chip (str "紹介経由 " (:referral c))) " "
+      [:span {:class "meta"} "(Meta Job Search からの referral)"]])])
 
 (defn- matches? [c q]
   (or (= q "")
@@ -38,7 +44,7 @@
   (let [q (.toLowerCase (.-value (js/document.getElementById "q")))
         hits (filter #(matches? % q) candidacies)]
     (set! (.-innerHTML (js/document.getElementById "board"))
-          (apply str (map card-html hits)))
+          (html.core/->html (into [:<>] (map card hits))))
     (set! (.-hidden (js/document.getElementById "empty")) (boolean (seq hits)))))
 
 (.addEventListener (js/document.getElementById "q") "input" render!)
