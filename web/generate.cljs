@@ -27,6 +27,7 @@
 ;; dds.css の読み込みパスは環境変数 JP_GO_DDS_CSS で上書きできる
 ;; (CI / worktree など monorepo 以外のレイアウト用)。
 (require '[clojure.string :as cstr]
+         '[css.core :as css]
          '[jp-go-dds.core :as dds]
          '[jp-go-dds.page :as page]
          '[langgraph.graph :as g]
@@ -152,49 +153,56 @@
 
 ;; ページ固有の微調整のみ。色は DADS token 参照で raw hex は書かない
 ;; (kotoba-uiux 規約)。レイアウトの土台は dds-ext-*(jp-go-dds.core/ext-css)。
-(def app-css
-  (str
-   ".pd-header{padding-block:2.5rem 0}"
-   ".pd-header .dads-heading{margin:0 0 .5rem}"
-   ".pd-lead{color:var(--color-neutral-solid-gray-700);line-height:1.7;margin:.75rem 0 0}"
-   ".pd-pitch{margin-block:2rem}"
-   ".pd-pitch .dads-heading{margin:0 0 .75rem}"
-   ".pd-pitch p{margin:0 0 .75rem;line-height:1.8}"
-   ".pd-pitch .dads-table{margin-block:1rem}"
-   ".pd-ctarow{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.25rem}"
-   ".pd-fine{color:var(--color-neutral-solid-gray-600);font-size:.8125rem;"
-   "line-height:1.8;margin-top:1rem}"
-   ".pd-search{max-width:32rem;margin-bottom:1.5rem}"
-   ".dads-input-text__input{width:100%}"
+(def app-rules
+  [[".pd-header" {:padding-block "2.5rem 0"}]
+   [".pd-header .dads-heading" {:margin "0 0 .5rem"}]
+   [".pd-lead" {:color "var(--color-neutral-solid-gray-700)" :line-height 1.7
+                :margin ".75rem 0 0"}]
+   [".pd-pitch" {:margin-block "2rem"}]
+   [".pd-pitch .dads-heading" {:margin "0 0 .75rem"}]
+   [".pd-pitch p" {:margin "0 0 .75rem" :line-height 1.8}]
+   [".pd-pitch .dads-table" {:margin-block "1rem"}]
+   [".pd-ctarow" {:display "flex" :gap ".75rem" :flex-wrap "wrap" :margin-top "1.25rem"}]
+   [".pd-fine" {:color "var(--color-neutral-solid-gray-600)" :font-size ".8125rem"
+                :line-height 1.8 :margin-top "1rem"}]
+   [".pd-search" {:max-width "32rem" :margin-bottom "1.5rem"}]
+   [".dads-input-text__input" {:width "100%"}]
    ;; candidacy カードは search.cljs が実行時に注入する(dds-ext-card + pd-card)
-   "#board{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));"
-   "gap:1rem;margin-top:1rem}"
-   "#board>*{min-width:0}"
-   ".pd-card h3{margin:0 0 .35rem;font-size:1rem}"
-   ".pd-card .meta{color:var(--color-neutral-solid-gray-600);font-size:.8125rem;line-height:1.7}"
-   ".pd-card .chip{display:inline-block;font-size:.75rem;margin:.35rem .35rem 0 0;"
-   "padding:.05rem .5rem;border-radius:1rem;"
-   "border:1px solid var(--color-neutral-solid-gray-300);"
-   "color:var(--color-neutral-solid-gray-700)}"
-   ".pd-empty{color:var(--color-neutral-solid-gray-600);margin-top:1rem}"
-   ".pd-hold-rules>span{display:block;margin-block:.15rem}"
+   ["#board" {:display "grid"
+              :grid-template-columns "repeat(auto-fill,minmax(16rem,1fr))"
+              :gap "1rem" :margin-top "1rem"}]
+   ["#board>*" {:min-width 0}]
+   [".pd-card h3" {:margin "0 0 .35rem" :font-size "1rem"}]
+   [".pd-card .meta" {:color "var(--color-neutral-solid-gray-600)"
+                      :font-size ".8125rem" :line-height 1.7}]
+   [".pd-card .chip" {:display "inline-block" :font-size ".75rem"
+                      :margin ".35rem .35rem 0 0" :padding ".05rem .5rem"
+                      :border-radius "1rem"
+                      :border "1px solid var(--color-neutral-solid-gray-300)"
+                      :color "var(--color-neutral-solid-gray-700)"}]
+   [".pd-empty" {:color "var(--color-neutral-solid-gray-600)" :margin-top "1rem"}]
+   [".pd-hold-rules>span" {:display "block" :margin-block ".15rem"}]
    ;; チップのラベルを途中で折り返さない。.dads-table は overflow-x:auto。
-   ".dads-table .dads-chip-label{white-space:nowrap}"
+   [".dads-table .dads-chip-label" {:white-space "nowrap"}]
    ;; 台帳は等幅。横に長いので自身の中でだけ横スクロールさせる
-   "pre{font-family:var(--font-family-mono);font-size:.8125rem;line-height:1.7;"
-   "background:var(--color-neutral-solid-gray-50);"
-   "border:1px solid var(--color-neutral-solid-gray-200);border-radius:8px;"
-   "padding:1rem;overflow-x:auto;margin-top:1rem}"
-   ".pd-guarantees{line-height:1.9;padding-left:1.25rem;margin:0}"
-   ".pd-footer{border-top:1px solid var(--color-neutral-solid-gray-200);"
-   "margin-top:3rem;padding-block:1.5rem 3rem;"
-   "color:var(--color-neutral-solid-gray-600);font-size:.875rem;line-height:1.8}"
-   ".pd-footer p{margin:0 0 .75rem}"
-   ".pd-footer .cta{font-size:.9375rem;font-weight:700;"
-   "color:var(--color-neutral-solid-gray-900)}"
-   "code{font-family:var(--font-family-mono);background:var(--color-neutral-solid-gray-50);"
-   "border:1px solid var(--color-neutral-solid-gray-200);border-radius:4px;"
-   "padding:1px 5px;font-size:.9em}"))
+   ["pre" {:font-family "var(--font-family-mono)" :font-size ".8125rem"
+           :line-height 1.7 :background "var(--color-neutral-solid-gray-50)"
+           :border "1px solid var(--color-neutral-solid-gray-200)"
+           :border-radius 8 :padding "1rem" :overflow-x "auto" :margin-top "1rem"}]
+   [".pd-guarantees" {:line-height 1.9 :padding-left "1.25rem" :margin 0}]
+   [".pd-footer" {:border-top "1px solid var(--color-neutral-solid-gray-200)"
+                  :margin-top "3rem" :padding-block "1.5rem 3rem"
+                  :color "var(--color-neutral-solid-gray-600)"
+                  :font-size ".875rem" :line-height 1.8}]
+   [".pd-footer p" {:margin "0 0 .75rem"}]
+   [".pd-footer .cta" {:font-size ".9375rem" :font-weight 700
+                       :color "var(--color-neutral-solid-gray-900)"}]
+   ["code" {:font-family "var(--font-family-mono)"
+            :background "var(--color-neutral-solid-gray-50)"
+            :border "1px solid var(--color-neutral-solid-gray-200)"
+            :border-radius 4 :padding "1px 5px" :font-size ".9em"}]])
+
+(def app-css (css/css {:rules app-rules}))
 
 ;; 判定バッジは DADS chip-label(filled-1)。
 (defn- chip [label color] (dds/chip-label label {:color color :style "filled-1"}))
@@ -325,6 +333,9 @@
   [[:script {:type "application/json" :id "board-data"}
     (js/JSON.stringify (clj->js (mapv candidacy->json-entry candidacies)))]
    [:script {:src "https://cdn.jsdelivr.net/npm/scittle@0.6.22/dist/scittle.js"}]
+   ;; search.cljs は hiccup を html.core で文字列化する(生 HTML を書かない)ので、
+   ;; そのライブラリもブラウザへ同梱する。読み込み順は依存順。
+   [:script {:type "application/x-scittle" :src "html_core.cljs"}]
    [:script {:type "application/x-scittle" :src "search.cljs"}]])
 
 (fs/mkdirSync "../docs" #js {:recursive true})
@@ -340,5 +351,9 @@
        scripts)
       "\n"))
 (fs/copyFileSync "search.cljs" "../docs/search.cljs")
+;; ブラウザ側 .cljs はコピーするだけ(ビルド無し)。
+(def html-root
+  (or (some-> js/process.env.KOTOBA_HTML_ROOT not-empty) "../../../kotoba-lang/html"))
+(fs/copyFileSync (str html-root "/src/html/core.cljc") "../docs/html_core.cljs")
 (println (str "wrote docs/index.html (" (count candidacies) " candidacies, "
               (count held) " holds, ledger " (count ledger) " facts)"))
