@@ -179,6 +179,16 @@
     (.toPlainString (.setScale (bigdec (double x)) 2 java.math.RoundingMode/HALF_UP))
     "—"))
 
+(defn- op-code
+  "The op rendered as the FULLY-QUALIFIED keyword it actually is.
+  `name` would drop the namespace, collapsing `:jurisdiction/assess`
+  to `assess` and `:candidacy/match` to `match` -- but the namespace is
+  the part that says which lifecycle the op belongs to, and the action
+  gate table states these ops in qualified form, so the run tables must
+  match it."
+  [op]
+  (if (keyword? op) (str op) "—"))
+
 (defn- last-fact-for [ledger candidacy-id]
   (last (filter #(= (:subject %) candidacy-id) ledger)))
 
@@ -232,7 +242,7 @@
     (format (str "        <tr><td><code>%s</code></td><td><code>%s</code></td>"
                  "<td><span class=\"critical\">%s</span></td><td>%s</td>"
                  "<td class=\"num\">%s</td></tr>")
-            (esc subject) (esc (name (or op :n-a)))
+            (esc subject) (esc (op-code op))
             (esc (name (or rule :unknown))) (esc detail)
             (esc (str confidence)))))
 
@@ -264,7 +274,7 @@
 
 (defn- approval-row [db {:keys [op subject] :as approval}]
   (format "        <tr><td><code>%s</code></td><td><code>%s</code></td><td>%s</td></tr>"
-          (esc subject) (esc (name (or op :n-a)))
+          (esc subject) (esc (op-code op))
           (approver-cell db approval)))
 
 (defn- draft-row [r]
@@ -290,7 +300,7 @@
           (if (= :governor-hold t)
             (str "<span class=\"critical\">" (esc (name t)) "</span>")
             (str "<span class=\"ok\">" (esc (name t)) "</span>"))
-          (esc (name (or op :n-a))) (esc subject)
+          (esc (op-code op)) (esc subject)
           (esc (some-> disposition name))
           (esc (or (some->> basis (map name) (str/join ", ")) ""))))
 

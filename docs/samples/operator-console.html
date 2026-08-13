@@ -2515,12 +2515,12 @@ img,svg { max-width: 100%; height: auto; }</style></head><body>
     <table>
       <thead><tr><th>Candidacy</th><th>Op</th><th>Rule</th><th>Detail</th><th>Advisor confidence</th></tr></thead>
       <tbody>
-        <tr><td><code>candidacy-2</code></td><td><code>assess</code></td><td><span class="critical">no-spec-basis</span></td><td>公式spec-basisの引用が無い提案は法域要件として扱えない</td><td class="num">0.9</td></tr>
-        <tr><td><code>candidacy-3</code></td><td><code>place</code></td><td><span class="critical">placement-fee-mismatch</span></td><td>candidacy-3 の申告紹介手数料(800000.0)が独立再計算値(700000.0)と一致しない</td><td class="num">0.3</td></tr>
-        <tr><td><code>candidacy-4</code></td><td><code>match</code></td><td><span class="critical">matching-basis-discriminatory</span></td><td>candidacy-4 のマッチング基準が保護属性に基づく可能性がある</td><td class="num">0.3</td></tr>
-        <tr><td><code>candidacy-5</code></td><td><code>place</code></td><td><span class="critical">work-authorization-unverified</span></td><td>candidacy-5 は在留資格/就労許可の確認を要するが未確認 -- 配置提案は進められない</td><td class="num">0.3</td></tr>
-        <tr><td><code>candidacy-1</code></td><td><code>match</code></td><td><span class="critical">already-matched</span></td><td>candidacy-1 は既にマッチング済み</td><td class="num">0.9</td></tr>
-        <tr><td><code>candidacy-1</code></td><td><code>place</code></td><td><span class="critical">already-placed</span></td><td>candidacy-1 は既に配置済み</td><td class="num">0.9</td></tr>
+        <tr><td><code>candidacy-2</code></td><td><code>:jurisdiction/assess</code></td><td><span class="critical">no-spec-basis</span></td><td>公式spec-basisの引用が無い提案は法域要件として扱えない</td><td class="num">0.9</td></tr>
+        <tr><td><code>candidacy-3</code></td><td><code>:candidacy/place</code></td><td><span class="critical">placement-fee-mismatch</span></td><td>candidacy-3 の申告紹介手数料(800000.0)が独立再計算値(700000.0)と一致しない</td><td class="num">0.3</td></tr>
+        <tr><td><code>candidacy-4</code></td><td><code>:candidacy/match</code></td><td><span class="critical">matching-basis-discriminatory</span></td><td>candidacy-4 のマッチング基準が保護属性に基づく可能性がある</td><td class="num">0.3</td></tr>
+        <tr><td><code>candidacy-5</code></td><td><code>:candidacy/place</code></td><td><span class="critical">work-authorization-unverified</span></td><td>candidacy-5 は在留資格/就労許可の確認を要するが未確認 -- 配置提案は進められない</td><td class="num">0.3</td></tr>
+        <tr><td><code>candidacy-1</code></td><td><code>:candidacy/match</code></td><td><span class="critical">already-matched</span></td><td>candidacy-1 は既にマッチング済み</td><td class="num">0.9</td></tr>
+        <tr><td><code>candidacy-1</code></td><td><code>:candidacy/place</code></td><td><span class="critical">already-placed</span></td><td>candidacy-1 は既に配置済み</td><td class="num">0.9</td></tr>
       </tbody>
     </table>
   </section>
@@ -2530,17 +2530,17 @@ img,svg { max-width: 100%; height: auto; }</style></head><body>
     <table>
       <thead><tr><th>Candidacy</th><th>Op</th><th>Approver</th></tr></thead>
       <tbody>
-        <tr><td><code>candidacy-1</code></td><td><code>assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
-        <tr><td><code>candidacy-1</code></td><td><code>match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
-        <tr><td><code>candidacy-1</code></td><td><code>place</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
-        <tr><td><code>candidacy-6</code></td><td><code>assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
-        <tr><td><code>candidacy-6</code></td><td><code>match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
-        <tr><td><code>candidacy-6</code></td><td><code>place</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
-        <tr><td><code>candidacy-3</code></td><td><code>assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
-        <tr><td><code>candidacy-3</code></td><td><code>match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
-        <tr><td><code>candidacy-4</code></td><td><code>assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
-        <tr><td><code>candidacy-5</code></td><td><code>assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
-        <tr><td><code>candidacy-5</code></td><td><code>match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
+        <tr><td><code>candidacy-1</code></td><td><code>:jurisdiction/assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
+        <tr><td><code>candidacy-1</code></td><td><code>:candidacy/match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
+        <tr><td><code>candidacy-1</code></td><td><code>:candidacy/place</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
+        <tr><td><code>candidacy-6</code></td><td><code>:jurisdiction/assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
+        <tr><td><code>candidacy-6</code></td><td><code>:candidacy/match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
+        <tr><td><code>candidacy-6</code></td><td><code>:candidacy/place</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
+        <tr><td><code>candidacy-3</code></td><td><code>:jurisdiction/assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
+        <tr><td><code>candidacy-3</code></td><td><code>:candidacy/match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
+        <tr><td><code>candidacy-4</code></td><td><code>:jurisdiction/assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
+        <tr><td><code>candidacy-5</code></td><td><code>:jurisdiction/assess</code></td><td><span class="ok">op-1</span> <span class="muted">(retained in record as <code>:approved-by</code>)</span></td></tr>
+        <tr><td><code>candidacy-5</code></td><td><code>:candidacy/match</code></td><td>op-1 <span class="muted">(audit only — not retained in record)</span></td></tr>
       </tbody>
     </table>
   </section>
@@ -2588,25 +2588,25 @@ img,svg { max-width: 100%; height: auto; }</style></head><body>
     <table>
       <thead><tr><th>Fact</th><th>Op</th><th>Candidacy</th><th>Disposition</th><th>Basis</th></tr></thead>
       <tbody>
-        <tr><td><span class="ok">committed</span></td><td><code>intake</code></td><td><code>candidacy-1</code></td><td>commit</td><td>id, candidate</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>assess</code></td><td><code>candidacy-1</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>match</code></td><td><code>candidacy-1</code></td><td>commit</td><td>candidacy-1</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>place</code></td><td><code>candidacy-1</code></td><td>commit</td><td>candidacy-1</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>intake</code></td><td><code>candidacy-6</code></td><td>commit</td><td>id, candidate</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>assess</code></td><td><code>candidacy-6</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>match</code></td><td><code>candidacy-6</code></td><td>commit</td><td>candidacy-6</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>place</code></td><td><code>candidacy-6</code></td><td>commit</td><td>candidacy-6</td></tr>
-        <tr><td><span class="critical">governor-hold</span></td><td><code>assess</code></td><td><code>candidacy-2</code></td><td>hold</td><td>no-spec-basis</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>assess</code></td><td><code>candidacy-3</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>match</code></td><td><code>candidacy-3</code></td><td>commit</td><td>candidacy-3</td></tr>
-        <tr><td><span class="critical">governor-hold</span></td><td><code>place</code></td><td><code>candidacy-3</code></td><td>hold</td><td>placement-fee-mismatch</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>assess</code></td><td><code>candidacy-4</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
-        <tr><td><span class="critical">governor-hold</span></td><td><code>match</code></td><td><code>candidacy-4</code></td><td>hold</td><td>matching-basis-discriminatory</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>assess</code></td><td><code>candidacy-5</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
-        <tr><td><span class="ok">committed</span></td><td><code>match</code></td><td><code>candidacy-5</code></td><td>commit</td><td>candidacy-5</td></tr>
-        <tr><td><span class="critical">governor-hold</span></td><td><code>place</code></td><td><code>candidacy-5</code></td><td>hold</td><td>work-authorization-unverified</td></tr>
-        <tr><td><span class="critical">governor-hold</span></td><td><code>match</code></td><td><code>candidacy-1</code></td><td>hold</td><td>already-matched</td></tr>
-        <tr><td><span class="critical">governor-hold</span></td><td><code>place</code></td><td><code>candidacy-1</code></td><td>hold</td><td>already-placed</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/intake</code></td><td><code>candidacy-1</code></td><td>commit</td><td>id, candidate</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:jurisdiction/assess</code></td><td><code>candidacy-1</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/match</code></td><td><code>candidacy-1</code></td><td>commit</td><td>candidacy-1</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/place</code></td><td><code>candidacy-1</code></td><td>commit</td><td>candidacy-1</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/intake</code></td><td><code>candidacy-6</code></td><td>commit</td><td>id, candidate</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:jurisdiction/assess</code></td><td><code>candidacy-6</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/match</code></td><td><code>candidacy-6</code></td><td>commit</td><td>candidacy-6</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/place</code></td><td><code>candidacy-6</code></td><td>commit</td><td>candidacy-6</td></tr>
+        <tr><td><span class="critical">governor-hold</span></td><td><code>:jurisdiction/assess</code></td><td><code>candidacy-2</code></td><td>hold</td><td>no-spec-basis</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:jurisdiction/assess</code></td><td><code>candidacy-3</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/match</code></td><td><code>candidacy-3</code></td><td>commit</td><td>candidacy-3</td></tr>
+        <tr><td><span class="critical">governor-hold</span></td><td><code>:candidacy/place</code></td><td><code>candidacy-3</code></td><td>hold</td><td>placement-fee-mismatch</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:jurisdiction/assess</code></td><td><code>candidacy-4</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
+        <tr><td><span class="critical">governor-hold</span></td><td><code>:candidacy/match</code></td><td><code>candidacy-4</code></td><td>hold</td><td>matching-basis-discriminatory</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:jurisdiction/assess</code></td><td><code>candidacy-5</code></td><td>commit</td><td>職業安定法 (Employment Security Act) 及び 男女雇用機会均等法 (Equal Employment Opportunity Act), https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/koyou_roudou/koyou/shokugyoushoukai/</td></tr>
+        <tr><td><span class="ok">committed</span></td><td><code>:candidacy/match</code></td><td><code>candidacy-5</code></td><td>commit</td><td>candidacy-5</td></tr>
+        <tr><td><span class="critical">governor-hold</span></td><td><code>:candidacy/place</code></td><td><code>candidacy-5</code></td><td>hold</td><td>work-authorization-unverified</td></tr>
+        <tr><td><span class="critical">governor-hold</span></td><td><code>:candidacy/match</code></td><td><code>candidacy-1</code></td><td>hold</td><td>already-matched</td></tr>
+        <tr><td><span class="critical">governor-hold</span></td><td><code>:candidacy/place</code></td><td><code>candidacy-1</code></td><td>hold</td><td>already-placed</td></tr>
       </tbody>
     </table>
   </section>
