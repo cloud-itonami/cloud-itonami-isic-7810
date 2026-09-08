@@ -26,7 +26,7 @@
   operator would keep, not the act of matching or placing a candidate
   itself (that is `employmentops.operation`'s `:candidacy/match`/
   `:candidacy/place`, always human-gated -- see README `Actuation`)."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (defn- unsigned-certificate
   "Every certificate this actor produces is UNSIGNED -- signature is
@@ -101,7 +101,7 @@
     (throw (ex-info "match: jurisdiction required" {})))
   (when (< sequence 0)
     (throw (ex-info "match: sequence must be >= 0" {})))
-  (let [match-number (str (str/upper-case jurisdiction) "-MTC-" (zero-pad sequence 6))
+  (let [match-number (str (str/upper jurisdiction) "-MTC-" (zero-pad sequence 6))
         record {"record_id" match-number
                 "kind" "match-draft"
                 "candidacy_id" candidacy-id
@@ -126,7 +126,7 @@
     (throw (ex-info "placement: jurisdiction required" {})))
   (when (< sequence 0)
     (throw (ex-info "placement: sequence must be >= 0" {})))
-  (let [placement-number (str (str/upper-case jurisdiction) "-PLC-" (zero-pad sequence 6))
+  (let [placement-number (str (str/upper jurisdiction) "-PLC-" (zero-pad sequence 6))
         record {"record_id" placement-number
                 "kind" "placement-draft"
                 "candidacy_id" candidacy-id

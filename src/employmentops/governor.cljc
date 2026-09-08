@@ -173,7 +173,7 @@
   `:status` value) -- the SAME 'check a dedicated boolean, not status'
   discipline every prior governor's guards establish, informed by
   `cloud-itonami-isic-6492`'s status-lifecycle bug (ADR-2607071320)."
-  (:require [clojure.string :as cstr]
+  (:require [kotoba.lang.text :as cstr]
             [employmentops.facts :as facts]
             [employmentops.registry :as registry]
             [employmentops.store :as store]))
