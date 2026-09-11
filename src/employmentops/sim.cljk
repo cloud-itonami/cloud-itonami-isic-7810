@@ -1,5 +1,5 @@
 (ns employmentops.sim
-  "Demo driver -- `clojure -M:dev:run`. Walks a clean candidacy
+  "Demo driver -- `kbb -M:dev:run`. Walks a clean candidacy
   through intake -> jurisdiction assessment -> candidate matching
   (escalate/approve/commit) -> candidate placement (escalate/approve/
   commit), then a SEPARATE clean work-authorization-required candidacy

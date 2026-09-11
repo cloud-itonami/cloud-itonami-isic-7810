@@ -184,7 +184,7 @@ auto-matching or auto-placing a candidate).
 - `MemStore` ‖ `DatomicStore` parity is proven by
   `test/employmentops/store_contract_test.cljk`.
 - 39 tests / 176 assertions pass; lint is clean; the demo
-  (`clojure -M:dev:run`) walks two clean match+place lifecycles (no
+  (`kbb -M:dev:run`) walks two clean match+place lifecycles (no
   work authorization required, work authorization required-and-
   verified), plus four HARD-hold scenarios, end-to-end.
 - `blueprint.edn` needed a genuine field-sync fix this time (a missing

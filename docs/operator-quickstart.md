@@ -25,8 +25,8 @@ other (superproject ADR-2607131000).
 
 ```bash
 git clone https://github.com/<you>/cloud-itonami-isic-7810 && cd cloud-itonami-isic-7810
-clojure -M:dev:test    # 39 tests — governor contract, phases, store parity, registry, facts
-clojure -M:dev:run     # two clean match+place lifecycles + every HARD-hold kind
+kbb -M:dev:test    # 39 tests — governor contract, phases, store parity, registry, facts
+kbb -M:dev:run     # two clean match+place lifecycles + every HARD-hold kind
 ```
 
 (`deps.edn` resolves `kotoba-lang/langgraph`/`langchain` as sibling
