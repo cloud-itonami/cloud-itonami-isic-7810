@@ -129,7 +129,7 @@ prior governor's guards establish, informed by
 `employmentops.store/Store` is implemented by both `MemStore` (atom-
 backed, default for dev/tests/demo) and `DatomicStore` (`langchain.
 db`-backed), proven to satisfy the same contract in
-`test/employmentops/store_contract_test.clj`.
+`test/employmentops/store_contract_test.cljk`.
 
 ### Decision 9: no bespoke domain capability lib, and no `blueprint.edn` field-sync fixes needed beyond `:optional-technologies`
 
@@ -182,7 +182,7 @@ auto-matching or auto-placing a candidate).
   application overall) and `work-authorization-unverified?` (85th
   distinct application overall, the TWELFTH conditional variant).
 - `MemStore` ‖ `DatomicStore` parity is proven by
-  `test/employmentops/store_contract_test.clj`.
+  `test/employmentops/store_contract_test.cljk`.
 - 39 tests / 176 assertions pass; lint is clean; the demo
   (`clojure -M:dev:run`) walks two clean match+place lifecycles (no
   work authorization required, work authorization required-and-

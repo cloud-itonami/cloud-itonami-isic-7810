@@ -67,7 +67,7 @@ enforce this (`employmentops.governor`'s `:actuation/match-candidate`/
 `:actuation/place-candidate` high-stakes gate and `employmentops.
 phase`'s phase table, which never puts either op in any phase's
 `:auto` set) -- see `employmentops.phase`'s docstring and
-`test/employmentops/phase_test.clj`'s `candidacy-match-never-auto-at-
+`test/employmentops/phase_test.cljk`'s `candidacy-match-never-auto-at-
 any-phase`/`candidacy-place-never-auto-at-any-phase`. The actor may
 draft, check and recommend; a human agency operator is always the one
 who actually matches or places a candidate. Grounded directly in this
@@ -122,18 +122,18 @@ for the fork-to-published walkthrough.
 The demo above is a
 static, zero-build Placement Desk demo (synthetic data). NOTHING on it
 is hand-typed (the fleet demo-page rule, superproject
-ADR-2607122300): `web/generate.cljs` (nbb) runs the FULL
+ADR-2607122300): `web/generate.cljk` (nbb) runs the FULL
 OperationActor StateGraph at build time -- two clean match+place
 lifecycles with approval interrupts, every HARD-hold kind and both
 double-actuation guards -- then renders the post-run candidacy board
 (real match/placement numbers), the real refusal verdicts and the
-append-only audit ledger. In-browser search is `web/search.cljs` run
-by scittle; `web/verify_search.cljs` is the headless nbb harness.
+append-only audit ledger. In-browser search is `web/search.cljk` run
+by scittle; `web/verify_search.cljk` is the headless nbb harness.
 
 ```bash
 cd web && ../../../../node_modules/.bin/nbb \
   --classpath "../src:../../../kotoba-lang/html/src:../../../kotoba-lang/jp-go-digital-design-system/src:../../../kotoba-lang/langchain/src:../../../kotoba-lang/langgraph/src" \
-  generate.cljs          # regenerate docs/index.html + docs/search.cljs
+  generate.cljs          # regenerate docs/index.html + docs/search.cljk
 ../../../../node_modules/.bin/nbb verify_search.cljs   # headless UI logic check
 ```
 
@@ -143,7 +143,7 @@ superproject **ADR-2607261600**: この actor は職業安定法・均等法・�
 労働法規をソフトウェアとして実装しており、日本の公的サービスの視覚言語に
 揃える方が利用者の信頼判断に効く）。DADS は **light mode 固定**（上流デジタル庁に
 dark palette が無い）なので、移行前の `prefers-color-scheme` による dark 対応は
-意図的に落としています。`web/generate.cljs` が読む vendored `dds.css` のパスは、
+意図的に落としています。`web/generate.cljk` が読む vendored `dds.css` のパスは、
 monorepo 以外のレイアウト（CI / git worktree）からは環境変数 `JP_GO_DDS_CSS`
 で上書きできます。
 
@@ -206,14 +206,14 @@ classification registry -- the occupation-classification analog of
 
 | File | Role |
 |---|---|
-| `src/employmentops/store.cljc` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + match AND placement history (dual history). The double-actuation guard checks dedicated `:matched?`/`:placed?` booleans rather than a `:status` value |
-| `src/employmentops/registry.cljc` | Match/placement draft records, plus `placement-fee-matches-claim?` -- an honest reapplication of the SAME ground-truth-recompute discipline every sibling actor's own cost/total-matching check establishes |
-| `src/employmentops/facts.cljc` | Per-jurisdiction anti-discrimination AND work-authorization catalog with an official spec-basis citation per entry, honest coverage reporting -- ALL FOUR seeded jurisdictions have a work-authorization sub-citation here |
-| `src/employmentops/employmentopsllm.cljc` | **EmploymentOps-LLM** -- `mock-advisor` ‖ `llm-advisor`; intake/jurisdiction-assessment/match/placement proposals |
-| `src/employmentops/governor.cljc` | **Employment Agency Governor** -- 5 HARD checks (spec-basis · evidence-incomplete · matching-basis-discriminatory, FLAGSHIP NEW, the 84th unconditional-evaluation-discipline grounding · placement-fee-mismatch · work-authorization-unverified, CONDITIONAL, the 85th grounding) + 2 double-actuation guards + 1 soft (confidence/actuation gate) |
-| `src/employmentops/phase.cljc` | **Phase 0→3** -- read-only → assisted intake → assisted assess → supervised (match/place always human; candidacy intake is the ONLY auto-eligible op, no direct candidate-facing risk) |
-| `src/employmentops/operation.cljc` | **OperationActor** -- langgraph StateGraph |
-| `src/employmentops/sim.cljc` | demo driver |
+| `src/employmentops/store.cljk` | **Store** protocol -- `MemStore` ‖ `DatomicStore` (`langchain.db`) + append-only audit ledger + match AND placement history (dual history). The double-actuation guard checks dedicated `:matched?`/`:placed?` booleans rather than a `:status` value |
+| `src/employmentops/registry.cljk` | Match/placement draft records, plus `placement-fee-matches-claim?` -- an honest reapplication of the SAME ground-truth-recompute discipline every sibling actor's own cost/total-matching check establishes |
+| `src/employmentops/facts.cljk` | Per-jurisdiction anti-discrimination AND work-authorization catalog with an official spec-basis citation per entry, honest coverage reporting -- ALL FOUR seeded jurisdictions have a work-authorization sub-citation here |
+| `src/employmentops/employmentopsllm.cljk` | **EmploymentOps-LLM** -- `mock-advisor` ‖ `llm-advisor`; intake/jurisdiction-assessment/match/placement proposals |
+| `src/employmentops/governor.cljk` | **Employment Agency Governor** -- 5 HARD checks (spec-basis · evidence-incomplete · matching-basis-discriminatory, FLAGSHIP NEW, the 84th unconditional-evaluation-discipline grounding · placement-fee-mismatch · work-authorization-unverified, CONDITIONAL, the 85th grounding) + 2 double-actuation guards + 1 soft (confidence/actuation gate) |
+| `src/employmentops/phase.cljk` | **Phase 0→3** -- read-only → assisted intake → assisted assess → supervised (match/place always human; candidacy intake is the ONLY auto-eligible op, no direct candidate-facing risk) |
+| `src/employmentops/operation.cljk` | **OperationActor** -- langgraph StateGraph |
+| `src/employmentops/sim.cljk` | demo driver |
 | `test/employmentops/*_test.clj` | governor contract · phase invariants · store parity · registry conformance · facts coverage |
 
 ## Business-process coverage (honest)

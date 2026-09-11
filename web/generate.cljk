@@ -273,7 +273,7 @@
     [:p {:class "pd-lead"}
      "この表はハードコードではなく、ページ生成時に実際の OperationActor へマッチング/配置を"
      "試行させ、"
-     [:a {:href "https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/src/employmentops/governor.cljc"}
+     [:a {:href "https://github.com/cloud-itonami/cloud-itonami-isic-7810/blob/main/src/employmentops/governor.cljk"}
       "Employment Agency Governor"]
      " が拒否した実判定です(HARD violation は人間の承認でも覆せません)。"]
     (dds/table
@@ -325,7 +325,7 @@
      [:a {:href "/cloud-itonami-isic-6399/"} "Meta Job Search"] " / "
      [:a {:href "/cloud-itonami-isic-6310/"} "Talent Board"]
      " · " [:a {:href "/"} "fleet catalog"]
-     "。このページは " [:code "web/generate.cljs"] " (nbb) が実 actor を実行して生成し、検索は "
+     "。このページは " [:code "web/generate.cljk"] " (nbb) が実 actor を実行して生成し、検索は "
      [:code "search.cljs"] " (scittle = ブラウザ内 ClojureScript) が実行しています。"]]))
 
 ;; script は html.core の raw-text tag。子は素の文字列で渡す。
@@ -350,10 +350,10 @@
        body
        scripts)
       "\n"))
-(fs/copyFileSync "search.cljs" "../docs/search.cljs")
+(fs/copyFileSync "search.cljs" "../docs/search.cljk")
 ;; ブラウザ側 .cljs はコピーするだけ(ビルド無し)。
 (def html-root
   (or (some-> js/process.env.KOTOBA_HTML_ROOT not-empty) "../../../kotoba-lang/html"))
-(fs/copyFileSync (str html-root "/src/html/core.cljc") "../docs/html_core.cljs")
+(fs/copyFileSync (str html-root "/src/html/core.cljc") "../docs/html_core.cljk")
 (println (str "wrote docs/index.html (" (count candidacies) " candidacies, "
               (count held) " holds, ledger " (count ledger) " facts)"))
