@@ -1,4 +1,4 @@
-;; Headless verification harness for docs/search.cljs -- stubs the DOM
+;; Headless verification harness for docs/search.cljk -- stubs the DOM
 ;; surface, feeds it the REAL JSON block from the generated
 ;; docs/index.html, loads search.cljs, and asserts the rendered board,
 ;; a search interaction, and the page's build-time actor-run content.
@@ -32,7 +32,7 @@
    "empty"      (el "empty" {"hidden" true})})
 
 (aset js/globalThis "document" (js-obj "getElementById" (fn [id] (get elements id))))
-(load-string (fs/readFileSync "../docs/search.cljs" "utf8"))
+(load-string (fs/readFileSync "../docs/search.cljk" "utf8"))
 
 (defn- board-html [] (aget (get elements "board") "innerHTML"))
 (defn- assert! [ok? msg]
