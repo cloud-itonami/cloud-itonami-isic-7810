@@ -1,0 +1,34 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:dev:physics` runs it.
+;;
+;; README "Robotics premise": a screening and logistics robot performs resume
+;; intake, matching and placement logistics for an employment agency
+;; (ISIC 7810). Its physical work: feeding stacks of paper application forms
+;; and resumes into the intake scanner, and carrying onboarding kits
+;; (uniforms, safety boots, badges) from the agency's storeroom to the
+;; orientation room for newly placed candidates.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isic-7810"
+ :cases
+ [{:id :resume-stack-into-scanner
+   :kind :manipulator
+   :procedure "desktop arm lifts a stack of paper resumes and application forms from the intake tray into the document scanner's feeder"
+   :params {:l1-m 0.30 :l2-m 0.25 :m1-kg 1.8 :m2-kg 1.2
+            :from [0.40 0.00] :to [0.15 0.35] :duration-s 1.5 :steps 300}
+   :sweep {:param :payload-kg :values [0.2 0.5 1.0 1.5 2.5]}
+   :quantity :peak-tau1-nm
+   :limit {:max 12.0 :basis "estimate: continuous shoulder torque of a small desktop arm (~1-2 kg payload class)"}
+   :boundary {:lo 0.05 :hi 10.0}}
+  {:id :onboarding-kit-to-orientation-room
+   :kind :transport
+   :procedure "logistics robot carries boxed onboarding kits (uniforms, safety boots, badges) from the storeroom to the orientation room"
+   :params {:mass-kg 35.0 :distance-m 45.0 :v-max-mps 1.0 :a-max-mps2 0.5
+            :brake-decel-mps2 0.8 :drive-force-n 50.0 :crr 0.02
+            :cog-height-m 0.50 :support-half-length-m 0.25 :max-time-s 1800.0}
+   :sweep {:param :payload-kg :values [5.0 15.0 30.0 60.0 120.0]}
+   :quantity :cycle-time-s
+   :limit {:max 60.0 :basis "estimate: kits must reach the orientation room within the 1-minute gap between candidate check-in and the session start per trip"}
+   :boundary {:lo 1.0 :hi 400.0}}]}
