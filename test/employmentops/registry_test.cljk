@@ -1,5 +1,5 @@
 (ns employmentops.registry-test
-  (:require [clojure.test :refer [deftest is]]
+  (:require [kotoba.test :refer [deftest is]]
             [employmentops.registry :as r]))
 
 ;; ----------------------------- placement-fee-matches-claim? -----------------------------
